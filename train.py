@@ -2,6 +2,7 @@ import torch
 from tqdm import tqdm
 import torch.nn as nn
 import torch.optim as optim
+from evaluate import evaluate
 
 def train(model, train_loader, val_loader, config):
     device = config.device
@@ -24,6 +25,9 @@ def train(model, train_loader, val_loader, config):
             optimizer.step()
 
             total_loss += loss.item()
+
+        accuracy = evaluate(model, val_loader, config)
+        print("Validation Accuracy:", accuracy)
 
     torch.save(model.state_dict(), config.model_save_path)
     print("Model saved!")
