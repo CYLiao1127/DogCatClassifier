@@ -7,14 +7,6 @@ from data.dataloader import get_dataloaders
 from model.model import DogCatModel
 from config import Config
 
-# def plot_confusion_matrix(y_true, y_pred, labels):
-#     cm = confusion_matrix(y_true, y_pred)
-#     disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=labels)
-#     disp.plot(cmap=plt.cm.Blues)
-#     plt.title("Confusion Matrix")
-#     plt.savefig("confusion_matrix.png")
-#     plt.close()
-#     print("📊 Saved confusion_matrix.png")
 
 def plot_confusion_matrix(y_true, y_pred, labels=("cat", "dog"), save_path="confusion_matrix.png"):
     # 將 labels 轉換為對應的整數 index：0, 1
@@ -48,47 +40,6 @@ def plot_roc(y_true, y_probs):
     plt.savefig("roc_curve.png")
     plt.close()
     print("📈 Saved roc_curve.png")
-
-# def evaluate_model(model, data_loader, config):
-#     config = Config()
-#     device = config.device
-
-#     _, val_loader = get_dataloaders(config.data_dir, config.img_size, config.batch_size)
-
-#     model = DogCatModel(num_classes=config.num_classes)
-#     model.load_state_dict(torch.load(config.model_save_path, map_location=device))
-#     model.to(device)
-#     model.eval()
-
-#     all_preds, all_probs, all_labels = [], [], []
-
-#     with torch.no_grad():
-#         for inputs, labels in val_loader:
-#             inputs = inputs.to(device)
-#             outputs = model(inputs)
-#             probs = torch.softmax(outputs, dim=1)[:, 1]
-#             preds = torch.argmax(outputs, dim=1)
-
-#             all_labels.extend(labels.cpu().numpy())
-#             all_preds.extend(preds.cpu().numpy())
-#             all_probs.extend(probs.cpu().numpy())
-
-#     acc = accuracy_score(all_labels, all_preds)
-#     precision = precision_score(all_labels, all_preds)
-#     recall = recall_score(all_labels, all_preds)
-
-#     print(f"\n📋 Evaluation Metrics:")
-#     print(f"Accuracy : {acc:.4f}")
-#     print(f"Precision: {precision:.4f}")
-#     print(f"Recall   : {recall:.4f}")
-
-#     plot_confusion_matrix(all_labels, all_preds, labels=['cat', 'dog'])
-#     plot_roc(all_labels, all_probs)
-
-# if __name__ == '__main__':
-#     evaluate_model()
-
-# import torch
 
 def evaluate(model, val_loader, config):
     model.eval()
@@ -125,13 +76,3 @@ def evaluate(model, val_loader, config):
     plot_roc(all_labels, all_probs)
 
     return 100 * correct / total
-
-
-    # with torch.no_grad():
-    #     for images, labels in val_loader:
-    #         images, labels = images.to(config.device), labels.to(config.device)
-    #         outputs = model(images)
-
-    #         _, preds = torch.max(outputs, 1)
-    #         correct += (preds == labels).sum().item()
-    #         total += labels.size(0)
