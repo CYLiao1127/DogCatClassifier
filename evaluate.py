@@ -1,4 +1,4 @@
-# evaluate.py
+import os
 import torch
 import numpy as np
 import matplotlib.pyplot as plt
@@ -8,7 +8,9 @@ from model.model import DogCatModel
 from config import Config
 
 
-def plot_confusion_matrix(y_true, y_pred, labels=("cat", "dog"), save_path="confusion_matrix.png"):
+def plot_confusion_matrix(y_true, y_pred, config, labels=("cat", "dog"), save_path="confusion_matrix.png"):
+    save_path = os.path.join(config.result_save_path, save_path)
+
     # 將 labels 轉換為對應的整數 index：0, 1
     label_to_index = {label: idx for idx, label in enumerate(labels)}
     index_labels = list(range(len(labels)))
@@ -26,7 +28,8 @@ def plot_confusion_matrix(y_true, y_pred, labels=("cat", "dog"), save_path="conf
     plt.close()
     print(f"📊 Confusion matrix saved to {save_path}")
 
-def plot_roc(y_true, y_probs):
+def plot_roc(y_true, y_probs, config, save_path="roc_curve.png"):
+    save_path = os.path.join(config.result_save_path, save_path)
     fpr, tpr, _ = roc_curve(y_true, y_probs)
     roc_auc = auc(fpr, tpr)
 
@@ -37,9 +40,9 @@ def plot_roc(y_true, y_probs):
     plt.ylabel('True Positive Rate')
     plt.title('ROC Curve')
     plt.legend(loc='lower right')
-    plt.savefig("roc_curve.png")
+    plt.savefig()
     plt.close()
-    print("📈 Saved roc_curve.png")
+    print(f"📊 Saved to {save_path}")
 
 def evaluate(model, val_loader, config):
     model.eval()

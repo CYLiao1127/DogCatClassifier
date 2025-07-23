@@ -1,3 +1,4 @@
+import os 
 import torch
 from tqdm import tqdm
 import torch.nn as nn
@@ -29,5 +30,6 @@ def train(model, train_loader, val_loader, config):
         accuracy = evaluate(model, val_loader, config)
         print("Validation Accuracy:", accuracy)
 
-    torch.save(model.state_dict(), config.model_save_path)
+    save_path = os.path.join(config.result_save_path, "result.pth")
+    torch.save(model.state_dict(), save_path)
     print("Model saved!")

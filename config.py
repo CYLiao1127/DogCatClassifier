@@ -8,4 +8,3 @@ class Config:
     num_classes = 2
     device = 'cuda'
     result_save_path = 'result'
-    model_save_path = './result.pth'
