@@ -46,13 +46,7 @@ pip install -r requirements.txt
 - Training the model
 
 ```bash
-python main.py
-```
-
-- Evaluating the model
-
-```bash
-python evaluate.py
+python main.py --model_name resnet18 --use_mixup True
 ```
 
 - Predicting images and save as csv file
@@ -68,6 +62,33 @@ python predict.py
 - Training conducted on RTX 2080 Ti and Google Colab T4 GPUs
 
 ## Results
-- The reported accuracy and metrics are based on the validation set (20% of the original training data), **not on a separate test set**.
-- Training accuracy: up to XX.X%
-- Validation accuracy: around XX.X%
+The reported accuracy and metrics are based on the validation set (20% of the original training data), **not on a separate test set**.
+- 
+### Model Performance Comparison
+
+We evaluated multiple deep learning architectures on our dataset to identify the best performing model. All models were trained with consistent hyperparameters and evaluated using the same set.
+#### Baseline Model Performance
+  
+| Model           | Batch Size | Accuracy | Precision | Recall | F1-Score* |
+|-----------------|------------|----------|-----------|--------|-----------|
+| ResNet-18       | 128        | 98.30%   | 98.75%    | 97.84% | 98.29%    |
+| ResNet-50       | 128        | 99.04%   | 98.53%    | 99.56% | 99.04%    |
+| EfficientNet-B0 | 128        | **99.06%**   | 98.65%    | 99.46% | 99.05%    |
+| DenseNet-121    | 64         | **99.14%** | **99.32%** | 98.96% | **99.14%** |
+| ViT-B/16        | 64         | 98.00%   | 98.41%    | 97.53% | 97.97%    |
+| ViT-B/16        | 32         | 95.68%   | 99.13%    | 92.07% | 95.46%    |
+
+*F1-Score calculated as harmonic mean of Precision and Recall
+
+### Data Augmentation Impact
+
+To improve model robustness and reduce overfitting, we applied various data augmentation techniques to ResNet-18 as our baseline model.
+
+#### Augmentation Techniques Evaluated
+
+| Augmentation Strategy | Accuracy | Precision | Recall | F1-Score | Improvement |
+|----------------------|----------|-----------|--------|----------|-------------|
+| Original (No Aug.)   | 98.30%   | 98.75%    | 97.84% | 98.29%   | Baseline    |
+| + Horizontal Flip    | 98.92%   | 98.71%    | 99.11% | 98.91%   | +0.62%      |
+| + MixUp             | 98.94%   | 98.76%    | 99.12% | 98.94%   | +0.64%      |
+| + Both Techniques   | **99.14%** | **99.40%** | **98.88%** | **99.14%** | **+0.84%** |

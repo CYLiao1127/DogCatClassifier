@@ -1,9 +1,21 @@
 import os
+import torch
+import random
 import argparse
+import numpy as np
 from config import Config
 from data.dataloader import get_dataloaders
 from model.model import DogCatModel
 from train import train
+
+def set_seed(seed=42):
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed(seed)  # 若使用 GPU
+    torch.cuda.manual_seed_all(seed)
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
 
 if __name__ == '__main__':
     # ---- Parse command-line arguments ----
