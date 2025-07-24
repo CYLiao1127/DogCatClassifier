@@ -75,7 +75,7 @@ def evaluate(model, val_loader, config):
     print(f"Precision: {precision:.4f}")
     print(f"Recall   : {recall:.4f}")
 
-    plot_confusion_matrix(all_labels, all_preds, labels=['dogs', 'cats'])
+    plot_confusion_matrix(all_labels, all_preds, config, labels=['dogs', 'cats'])
     plot_roc(all_labels, all_probs, config)
 
     return 100 * correct / total
