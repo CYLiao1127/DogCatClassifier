@@ -13,6 +13,7 @@ if __name__ == '__main__':
     parser.add_argument('--batch_size', type=int, help='Batch size for training')
     parser.add_argument('--img_size', type=int, help='Input image size (e.g. 224)')
     parser.add_argument('--epochs', type=int, help='Number of training epochs')
+    parser.add_argument('--use_mixup', type=bool, help='Using MixUp method or not')
     args = parser.parse_args()
 
     # ---- Load config and override ----
@@ -25,6 +26,8 @@ if __name__ == '__main__':
         config.img_size = args.img_size
     if args.epochs:
         config.epochs = args.epochs
+    if args.use_mixup:
+        config.use_mixup = args.use_mixup
 
     # ----- prepare data and model ----
     train_loader, val_loader = get_dataloaders(
