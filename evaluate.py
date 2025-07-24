@@ -40,7 +40,7 @@ def plot_roc(y_true, y_probs, config, save_path="roc_curve.png"):
     plt.ylabel('True Positive Rate')
     plt.title('ROC Curve')
     plt.legend(loc='lower right')
-    plt.savefig()
+    plt.savefig(save_path)
     plt.close()
     print(f"📊 Saved to {save_path}")
 
@@ -76,6 +76,6 @@ def evaluate(model, val_loader, config):
     print(f"Recall   : {recall:.4f}")
 
     plot_confusion_matrix(all_labels, all_preds, labels=['dogs', 'cats'])
-    plot_roc(all_labels, all_probs)
+    plot_roc(all_labels, all_probs, config)
 
     return 100 * correct / total
