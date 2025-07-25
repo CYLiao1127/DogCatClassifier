@@ -46,27 +46,51 @@ pip install -r requirements.txt
 ```
 
 ## Training and Evaluation
-- Training the model
+### Training the model
+To train the model, run:
 ```bash
 python main.py --model_name {model_name} --use_mixup {True/False}
-# For example
+```
+Example:
+```bash
 python main.py --model_name resnet18 --use_mixup True
 ```
-*model_name can choose resnet18, resnet50, efficientnet_b0, densenet121, vit_b_16
+- Available model options for --model_name:
+  - resnet18
+  - resnet50
+  - efficientnet_b0
+  - densenet121
+  - vit_b_16
+- The --use_mixup flag enables MixUp data augmentation during training.
 
-- Evaluate the model
+### Evaluate the model
+To evaluate the model on validation data:
 ```bash
 python evaluate.py --data_dir {data_dir} --best_model_path {best_model_path}
-# For example
+```
+Example:
+```bash
 python evaluate.py --data_dir data/data --best_model_path result/best_model.pth
 ```
 
-- Predicting images and save as csv file
+### Predict Images and Save Results
+To make predictions on test images and save results to a CSV file:
 ```bash
 python predict.py --best_model_path {best_model_path} --save_file {save_file}
-# For example
+```
+Example:
+```bash
 python predict.py --best_model_path result/best_model.pth --save_file "prediction.csv"
 ```
+
+### Train on Google Colab
+If you prefer training on Google Colab:
+
+- Use the provided notebook: `DogCatClassifier.ipynb`
+- Ensure you have a Kaggle API key uploaded as kaggle.json to download the dataset:
+  - Go to your [Kaggle account settings](https://www.kaggle.com/settings)
+  - Click "Create New API Token"
+  - Upload the downloaded `kaggle.json` in Colab and run the setup cells
 
 ## Model Details
 - Backbone: Pretrained ResNet18 fine-tuned for binary classification
