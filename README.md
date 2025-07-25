@@ -101,7 +101,7 @@ If you prefer training on Google Colab:
 
 ## Results
 The reported accuracy and metrics are based on the validation set (20% of the original training data), **not on a separate test set**.
-- 
+
 ### Model Performance Comparison
 
 We evaluated multiple deep learning architectures on our dataset to identify the best performing model. All models were trained with consistent hyperparameters and evaluated using the same set.
