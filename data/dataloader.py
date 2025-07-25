@@ -2,6 +2,7 @@ import os
 import random
 import torch
 from torch.utils.data import Dataset, DataLoader, random_split
+from data_analysis import analyze_dataset_distribution, plot_distribution_comparison, analyze_distribution_difference
 from torchvision import transforms
 from PIL import Image
 
@@ -16,6 +17,8 @@ class DogCatDataset(Dataset):
             transforms.Resize((img_size, img_size)),
             transforms.RandomHorizontalFlip() if mode == 'train' else transforms.Lambda(lambda x: x),
             transforms.ToTensor(),
+            transforms.Normalize(mean=[0.485, 0.456, 0.406],
+                                std=[0.229, 0.224, 0.225])
         ])
         self.mode = mode
 
@@ -39,13 +42,24 @@ def get_dataloaders(data_dir, img_size, batch_size, val_ratio=0.2):
 
     val_len = int(len(indices) * val_ratio)
     train_len = len(indices) - val_len
+    print(val_len, train_len)
 
     # 用 Subset 來指定資料順序
     from torch.utils.data import Subset
 
     train_indices = indices[:train_len]
     val_indices = indices[train_len:]
-    print(train_len, val_len)
+
+    # # 執行分析
+    # train_counter, val_counter, full_counter = analyze_dataset_distribution(
+    #     full_dataset, train_indices, val_indices
+    # )
+
+    # # 繪製比較圖
+    # plot_distribution_comparison(train_counter, val_counter, full_counter)
+
+    # # 分析分布差異
+    # analyze_distribution_difference(train_counter, val_counter)
 
     train_set = Subset(full_dataset, train_indices)
     val_set = Subset(full_dataset, val_indices)

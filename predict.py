@@ -1,6 +1,7 @@
 import os
 import csv
 import torch
+import argparse
 from torchvision import transforms
 from PIL import Image
 from model.model import DogCatModel
@@ -21,11 +22,9 @@ def predict_image(model, image_path, transform, device):
         pred = torch.argmax(output, dim=1).item()
     return pred
 
-def main():
-    config = Config()
-
-    image_dir = os.path.join(config.data_dir, 'test')  # 假設 test 資料在這
-    output_csv = "prediction.csv"
+def main(config):
+    image_dir = os.path.join(config.data_dir, 'test1')
+    output_csv = config.save_file
 
     model = load_model(config)
 
@@ -42,8 +41,8 @@ def main():
     for img_name in image_files:
         img_path = os.path.join(image_dir, img_name)
         pred = predict_image(model, img_path, transform, config.device)
-        label = 'cat' if pred == 0 else 'dog'
-        results.append([img_name, label])
+        # label = 'dog' if pred == 0 else 'cat'
+        results.append([img_name.replace(".jpg", ""), pred])
 
     # 儲存 CSV
     with open(output_csv, 'w', newline='') as f:
@@ -51,7 +50,23 @@ def main():
         writer.writerow(['filename', 'label'])  # CSV 標頭
         writer.writerows(results)
 
-    print(f"✅ Prediction finished. Results saved to {output_csv}")
+    print(f"Prediction finished. Results saved to {output_csv}")
 
 if __name__ == '__main__':
-    main()
+    # ---- Parse command-line arguments ----
+    parser = argparse.ArgumentParser(description='Dog vs Cat Classification')
+    # parser.add_argument('--mode', type=str, default='train', help='Mode: train / eval / predict')
+    parser.add_argument('--model_name', type=str, help='Model architecture (e.g. resnet18, resnet50)')
+    parser.add_argument('--best_model_path', type=str, required=True, help='')
+    parser.add_argument('--save_file', required=True, type=str, help='')
+    args = parser.parse_args()
+
+    config = Config()
+    if args.model_name:
+        config.model_name = args.model_name
+    if args.best_model_path:
+        config.best_model_path = args.best_model_path
+    if args.save_file:
+        config.save_file = args.save_file
+
+    main(config)
