@@ -2,7 +2,7 @@ import os
 import random
 import torch
 from torch.utils.data import Dataset, DataLoader, random_split
-from data_analysis import analyze_dataset_distribution, plot_distribution_comparison, analyze_distribution_difference
+from .data_analysis import analyze_dataset_distribution, plot_distribution_comparison, analyze_distribution_difference
 from torchvision import transforms
 from PIL import Image
 
@@ -68,3 +68,5 @@ def get_dataloaders(data_dir, img_size, batch_size, val_ratio=0.2):
     val_loader = DataLoader(val_set, batch_size=batch_size, shuffle=False)
 
     return train_loader, val_loader
+
+# get_dataloaders("data", 224, 128, val_ratio=0.2)

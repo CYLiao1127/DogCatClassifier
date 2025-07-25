@@ -47,13 +47,19 @@ pip install -r requirements.txt
 
 ## Training and Evaluation
 - Training the model
-
 ```bash
 python main.py --model_name {model_name} --use_mixup {True/False}
 # For example
 python main.py --model_name resnet18 --use_mixup True
 ```
 *model_name can choose resnet18, resnet50, efficientnet_b0, densenet121, vit_b_16
+
+- Evaluate the model
+```bash
+python evaluate.py --data_dir {data_dir} --best_model_path {best_model_path}
+# For example
+python evaluate.py --data_dir data/data --best_model_path result/best_model.pth
+```
 
 - Predicting images and save as csv file
 ```bash

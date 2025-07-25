@@ -1,6 +1,9 @@
 import os
 import torch
+import argparse
 import numpy as np
+from data.dataloader import get_dataloaders
+from predict import load_model
 import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, roc_curve, auc, precision_score, recall_score, accuracy_score
 from data.dataloader import get_dataloaders
@@ -79,3 +82,27 @@ def evaluate(model, val_loader, config):
     plot_roc(all_labels, all_probs, config)
 
     return 100 * correct / total
+
+if __name__ == '__main__':
+    # ---- Parse command-line arguments ----
+    parser = argparse.ArgumentParser(description='Dog vs Cat Classification')
+    parser.add_argument('--data_dir', type=str, default='', help='')
+    parser.add_argument('--model_name', type=str, help='Model architecture (e.g. resnet18, resnet50)')
+    parser.add_argument('--best_model_path', type=str, required=True, help='')
+    args = parser.parse_args()
+
+    config = Config()
+    if args.model_name:
+        config.model_name = args.model_name
+    if args.best_model_path:
+        config.best_model_path = args.best_model_path
+
+    model = load_model(config)
+
+    _, val_loader = get_dataloaders(
+        data_dir=args.data_dir,
+        img_size=224,
+        batch_size=128,
+        val_ratio=0.2
+    )
+    val_acc = evaluate(model, val_loader, config)
